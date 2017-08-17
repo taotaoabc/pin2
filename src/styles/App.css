@@ -1,0 +1,37 @@
+/* Base Application Styles */
+html,body,#app{
+  width:100%;
+  height: 100%;
+  background-color: #222;
+  /*text-align: center;*/
+}
+
+
+/*stage start*/
+.stage{
+  position: relative;
+  margin: 0 auto; /*内容水平居中*/
+  margin-top:10%;
+  width: 70%;
+  height: 60%;
+  background-color: #666;
+  }
+
+
+/*cell start*/
+.ImgCell{
+  position: absolute;
+  background-color: #f00;
+  background-image:url('../images/Penguins.jpg');
+  background-position:10% 10% ;
+  border: 0;
+  margin: 0;
+  padding: 0
+}
+
+/*.ImgCell img{
+  position:absolute; 
+  clip: rect(0px 100px 0px 100px);
+  width: 100%;
+  height: 100%;
+}*/
