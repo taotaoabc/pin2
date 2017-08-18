@@ -2,12 +2,11 @@ require('normalize.css/normalize.css');
 require('styles/App.css');
 
 import React from 'react';
+import ReactDOM from 'react-dom';
 
-let yeomanImage = require('../images/yeoman.png');
+let Penguins = require('../images/Penguins2.jpg');
 
 class Cell extends React.Component {
-
-	
 
 	handleClick(e){
 		console.log('click');
@@ -15,19 +14,39 @@ class Cell extends React.Component {
 		e.preventDefault();
 	}
 
+		componentDidMount(){
+		//首先拿到舞台的大小
+		// var ImgDOM = ReactDOM.findDOMNode(this.refs.ImgCell);
+		// var ImgRef = ReactDOM.findDOMNode(this.refs.ImgRef);
+		// var ctx = ImgDOM.getContext('2d');
+		// console.log(this.props.arrange.posXY.y);
+		// console.log(this.props.arrange.posXY.x);
+		// ctx.drawImage(ImgRef,this.props.arrange.posXY.x*100,
+		// 	this.props.arrange.posXY.y*100,
+		// 	100,100,
+		// 	this.props.arrange.posXY.y*100,
+		// 	this.props.arrange.posXY.x*100,
+		// 	100,100);
+
+	}
+
 	render() {
 		var styleObj = {};
 		styleObj = {
-			top : Math.ceil(this.props.arrange.posXY.y/3*100) + '%',
-			left :Math.ceil(this.props.arrange.posXY.x/7*100) + '%',
-			width: Math.ceil(1/7*100) + '%',
-			height: Math.ceil(1/3*100) + '%',
-
+			top : Math.ceil(this.props.arrange.posXY.y*100),
+			left: Math.ceil(this.props.arrange.posXY.x*100),
+			width: 100,
+			height: 100,
 		};
+
+		styleObj.backgroundPosition="-"+styleObj.left+"px "+
+		"-"+styleObj.top+"px";
+
+		
 	    return (
-	        <figure className="ImgCell" style={styleObj} onClick={this.handleClick.bind(this)}>
-				<img src='../images/Penguins.jpg'/>
-		    </figure>
+	        <div className="ImgCell" style={styleObj}  ref="ImgCell"
+	        onClick={this.handleClick.bind(this)}>
+		    </div>
 	    );
 	}
 }
@@ -39,8 +58,8 @@ class AppComponent extends React.Component {
 		super(props);
 		this.state = {imgsArray:[]};
 		this.scale = {
-			cols: 7,
-			rows: 3
+			cols: 8,
+			rows: 4
 		};
 		
 	}
@@ -57,13 +76,15 @@ class AppComponent extends React.Component {
   		imgsArray[index] = {
   			index:index,
   			posXY:{
-  				x:(index % this.scale.cols),
-  				y:(index % this.scale.rows)
+  				x:(index % 8),
+  				y:((index-index % 8)/8)
   			}
   		};
 
   		imgFigures.push(<Cell arrange = {imgsArray[index]}/>);
   	}
+
+  	imgFigures.sort();
 
   	this.state.imgsArray = imgsArray;
 
