@@ -40,9 +40,9 @@ class Cell extends React.Component {
 		styleObj.backgroundPosition="-"+stdLeft+"px "+
 		"-"+stdTop+"px";
 
-		var index = this.props.arrange.index;
+		var isBlank = this.props.arrange.isBlank;
 
-		if(index==7)
+		if(isBlank)
 		{
 			return (
 	        <div className="ImgCell2" style={styleObj2}>
@@ -66,9 +66,15 @@ class Cell extends React.Component {
 // 	obj1.posXY = obj2.posXY;
 // 	obj2.posXY = temp.posXY;
 function changePos(obj1,obj2){
-	var temp = obj1.posXY;
-	obj1.posXY = obj2.posXY;
-	obj2.posXY = temp;
+	var temp1 = obj1.posXYStd;
+	var temp2 = obj1.isBlank;
+	var temp3 = obj1.index;
+	obj1.posXYStd = obj2.posXYStd;
+	obj1.isBlank = obj2.isBlank;
+	obj1.index = obj2.index;
+	obj2.posXYStd = temp1;
+	obj2.isBlank = temp2;
+	obj2.index = temp3;
 }
 
 class AppComponent extends React.Component {
@@ -87,13 +93,29 @@ class AppComponent extends React.Component {
   	//posXYStd用来记录每个Cell的background-position位置信息，此信息不会发生变化
   	for(var index =0; index < length ; index++)
   	{
-  		imgsArray[index] = {
+  		if(index!=7)
+  		{
+  			imgsArray[index] = {
+  			isBlank:false,
   			index:index,
   			posXYStd:{
   				x:(index % 8),
   				y:((index-index % 8)/8)
   			}
   		};
+  		}
+	  	else
+	  	{
+	  		imgsArray[index] = {
+  			isBlank:true,
+  			index:index,
+  			posXYStd:{
+  				x:(index % 8),
+  				y:((index-index % 8)/8)
+  			}
+  		};
+	  	}
+  		
 
   	}
 
@@ -111,7 +133,7 @@ class AppComponent extends React.Component {
   		};
   	}
   	
-console.log(imgsArray);
+	console.log(imgsArray);
   	this.state.imgsArray = imgsArray;
 		
 	}
@@ -127,30 +149,30 @@ console.log(imgsArray);
 			{
 				if(index-8>=0)
 				{
-					if(imgsArray[index-8].index ==7)
+					if(imgsArray[index-8].isBlank)
 					{
 						changePos(imgsArray[index-8],imgsArray[index]);
 					}
 				}
 				if(index+8<32)
 				{
-					if(imgsArray[index+8].index ==7)
+					if(imgsArray[index+8].isBlank)
 					{
 						changePos(imgsArray[index+8],imgsArray[index]);
 					}
 				}
 				if(index+1<32)
 				{
-					if(imgsArray[index+1].index ==7)
+					if(imgsArray[index+1].isBlank)
 					{
 						changePos(imgsArray[index+1],imgsArray[index]);						
 					}
 				}
 				if(index-1>=0)
 				{
-					if(imgsArray[index-1].index ==7)
+					if(imgsArray[index-1].isBlank)
 					{
-						changePos(imgsArray[index+7],imgsArray[index-1]);						
+						changePos(imgsArray[index-1],imgsArray[index]);						
 					}
 				}
 			}
@@ -169,11 +191,9 @@ console.log(imgsArray);
   	var imgFigures = [];
   	for(var index =0; index < length ; index++)
   	{
-  		if(this.state.imgsArray[index].index!=7)
-  		{
   			imgFigures.push(<Cell arrange = {this.state.imgsArray[index]}
   				move = {this.move(index).bind(this)}/>);  			
-  		}  		
+
   	}
 
 
